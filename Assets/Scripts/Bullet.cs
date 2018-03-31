@@ -7,9 +7,12 @@ public class Bullet : MonoBehaviour {
     public int moveSpeed = 10;
 	public int damage = 10;
 	public bool isEnmey = true;
-	// Use this for initialization
+	private GameObject player;
+	public GameObject enemy;
+	
+
 	void Start () {
-		InitGun();
+		// InitGun();
 	}
 	
 	// Update is called once per frame

@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class Enemy : MonoBehaviour {
 
     public float moveSpeed = 3;
 	public int hp = 100;
+
 
 	// Use this for initialization
 	void Start () {
@@ -17,34 +20,34 @@ public class Enemy : MonoBehaviour {
 		Move();
 	}
 
-	private virtual void Move(){
-        Vector3 tempPos = pos;
-		tempPos.y -= moveSpeed * Time.deltaTime;
-		pos = tempPos;
+	public virtual void Move(){
+        // Vector3 tempPos = pos;
+		// tempPos.y -= moveSpeed * Time.deltaTime;
+		// pos = tempPos;
 	}
  
-    void OnCollisionEnter(Collection coll){
-		GameObject other = coll.gameObject;
-		switch (other.tag)
-		{
-			case "Player":
+    // void OnCollisionEnter(Collection coll){
+	// 	GameObject other = coll.gameObject;
+	// 	switch (other.tag)
+	// 	{
+	// 		case "Player":
 			    
-			    break;
-			case "Enemy":
-			    Destory(this.gameObject);
-				break;
-			default:
-			    break;
-		}
-	}
+	// 		    break;
+	// 		case "Enemy":
+	// 		    Destory(this.gameObject);
+	// 			break;
+	// 		default:
+	// 		    break;
+	// 	}
+	// }
 
-	public Vector3 pos{
-		get {
-			return (this.tranform.position);
-		}
-		set {
-			this.tranform.position = value;
-		}
-	}
+	// public Vector3 pos{
+	// 	get {
+	// 		return (this.tranform.position);
+	// 	}
+	// 	set {
+	// 		this.tranform.position = value;
+	// 	}
+	// }
 	
 }

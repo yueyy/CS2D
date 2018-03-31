@@ -1,66 +1,99 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class Shoot : MonoBehaviour {
     
 	public string weaponName;
-	private List<Bullet> bullets;  // 子弹对象数组
+	private Rigidbody2D rb;
+
+	private GameObject bullet;
 	private int bulletCount = 20; // 一个弹夹子弹数
-	private int maxBullet = 10; // 预加载子弹数
-	private int currentBullet = 0; // 已激活子弹数
-    public int shootCount; // 一个弹夹中已打出去的子弹数
-	// public float fireRote = 0.2f; // 开火间隔
-	// private float currentFireTime; // 当前时间
-	public int charger = 5; // 弹夹数
+	public int damage = 10; // 一个子弹的伤害
+    private GameObject player;
+	private GameObject enemy;
+	public bool IS_PLAYER_BULLET = false;
+	private float MoveSpeed = 8f;
 
-	// public float loadTime = 1.5f;
-	// public float currentLoadTime = 0;
-
-	// Use this for initialization
 	void Start () {
-		InitGun();
+		rb = GetComponent<Rigidbody2D>();
+		Vector3 v3 = transform.up.normalized;
+		rb.velocity = v3 * MoveSpeed;
+
+		if (IS_PLAYER_BULLET == true){
+			player = GameObject.FindObjectWithTag("Player");
+		}
 	}
 	
-	// Update is called once per frame
 	void Update () {
-		if (Input.GetButton("Fire1")&&checkFire())
+		if (Input.GetButton("Fire1"))
 		{
-			Shot();
+			Shoot();
 		}
 	}
 
-    public void InitGun(){
-        Bullet weapons = Resources.Load<Bullet> (wraponName);
-		if(weapons){
-			bullet = new List<Bullet>();
-			for(int i = 0; i < maxBullet; i++){
-				Bullet bullet = Instantiate(weapons);
-				bullet.gameObject.SetActive(false);
-				bullet.InitWeapon(transform);
-				bullets.Add(bullet);
+    // public void InitGun(){
+    //     bullet =(GameObject) Resources.Load("bullet");
+		
+	// }
+
+	// private bool checkFire(){
+    //     if(charger == 0){
+	// 		return true;
+	// 	}
+	// 	// 当前弹夹有剩余子弹
+	// 	if(shootCount < bulletCount){
+	// 		return false;
+	// 	}
+	// 	return true;
+	// }
+
+// 更新子弹数量
+    private void updateNowBulletCount(){
+		if(player != null){
+			int tempCount = player.GetComponent<Player>().nowBulletCount;
+			if(tempCount > 0){
+				player.GetComponent<Player>().nowBulletCount -= 1;
 			}
 		}
-		weapons = null;
 	}
 
-	private bool checkFire(){
-        if(charger == 0){
-			return true;
-		}
-		// 当前弹夹有剩余子弹
-		if(shootCount < bulletCount){
-			return false;
-		}
 
-	
+	/// <summary>
+	/// 碰撞检测
+	/// </summary>
+	/// <param name="other">The other Collider2D involved in this collision.</param>
+	void OnTriggerEnter2D(Collider2D other)
+	{
+		if(IS_PLAYER_BULLET == true){
+			switch (other.tag)
+			{
+				case "Enemy":
+				    this.gameObject.hp -= 10;
+					break;
+				case "brick":
+				    Destroy(other.gameObject);
+					updateNowBulletCount();
+					
+					break;
 
-		return true;
-	}
+				default:
+				    break;
+			}
+		}else{
+			switch(other.tag){
+				case "Player":
+				    
+					break;
+				case "brick":
+				    
+					break;
 
-	private void Shot(){
-        if(bullets != null && bullets.Count > 0){
-			
+				default:
+				    break;
+			}
 		}
 	}
 }
